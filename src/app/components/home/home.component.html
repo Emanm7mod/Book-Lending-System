@@ -1,0 +1,33 @@
+<app-header></app-header>
+
+<!-- Hero Section -->
+<section class="hero bg-light text-center py-5">
+  <div class="container">
+    <h1 class="display-4">Welcome to Our Digital Library</h1>
+    <p class="lead">Browse, choose, and borrow your favorite books with ease.</p>
+    <a routerLink="/books" class="btn btn-primary btn-lg mt-3">Get Started</a>
+    <!-- <a routerLink="/bookforadmin" class="btn btn-primary btn-lg mt-3">book for admin</a> -->
+  </div>
+</section>
+
+<!-- Books Section -->
+<section class="books-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let book of featuredBooks">
+        <div class="card h-100">
+          <img [src]="book.image" class="card-img-top" [alt]="book.title" width="100px" height="300px"/>
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text">{{ book.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer bg-dark text-white text-center py-3 mt-4">
+  <p>&copy; 2025 Book Borrowing Library. All rights reserved.</p>
+</footer>
