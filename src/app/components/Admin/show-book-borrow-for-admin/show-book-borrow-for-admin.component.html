@@ -1,0 +1,109 @@
+<div class="container mt-4 mb-4">
+  <h2 class="text-center mb-4">Dashboard Overview</h2>
+  <div class="row text-center mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-primary">
+        <div class="card-body">
+          <h5 class="card-title">Total Books</h5>
+          <p class="card-text display-6 text-primary">{{ totalBooks }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-danger">
+        <div class="card-body">
+          <h5 class="card-title">Total Overdue Books</h5>
+          <p class="card-text display-6 text-danger">{{ totalOverdue }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-warning">
+        <div class="card-body">
+          <h5 class="card-title">Total Borrows Books</h5>
+          <p class="card-text display-6 text-warning">{{ totalBorrows }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-success">
+        <div class="card-body">
+          <h5 class="card-title">Total Returned Books</h5>
+          <p class="card-text display-6 text-success">{{ totalReturned }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <div class="d-flex justify-content-center mb-4 gap-2 flex-wrap">
+    <button class="btn"
+      [class.btn-primary]="selectedTab === 'all'"
+      [class.btn-outline-primary]="selectedTab !== 'all'"
+      (click)="selectTab('all')">All</button>
+
+    <button class="btn"
+      [class.btn-primary]="selectedTab === 'overdue'"
+      [class.btn-outline-primary]="selectedTab !== 'overdue'"
+      (click)="selectTab('overdue')">Overdue</button>
+
+    <button class="btn"
+      [class.btn-primary]="selectedTab === 'returned'"
+      [class.btn-outline-primary]="selectedTab !== 'returned'"
+      (click)="selectTab('returned')">Returned</button>
+  </div>
+  <div *ngIf="!isLoading" class="table-responsive">
+    <table class="table table-bordered text-center align-middle" *ngIf="filteredRecords.length > 0">
+      <thead class="table-dark">
+        <tr>
+          <th>Number</th>
+          <th>User Name</th>
+          <th>Book Name</th>
+          <th>Borrow Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of filteredRecords ,let i = index">
+          <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+          <td>{{ record.userName }}</td>
+          <td>{{ record.bookName }}</td>
+          <td>{{ record.borrowDate | date: 'yyyy-MM-dd' }}</td>
+          <td>
+            <span [ngClass]="{
+              'text-success': record.statusBook === 'Returned',
+              'text-danger': record.statusBook === 'Not Returned'
+            }">
+              {{ record.statusBook }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-center" *ngIf="filteredRecords.length === 0">
+    No borrowing records found.
+  </p>
+  <div class="d-flex flex-wrap justify-content-center mt-3 gap-2">
+    <button class="btn btn-outline-primary" (click)="previousPage()" [disabled]="pageNumber === 1">
+      Prev
+    </button>
+
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button class="btn btn-outline-primary"
+              [class.active]="pageNumber === i + 1"
+              (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+
+    <button class="btn btn-outline-primary" (click)="nextPage()" [disabled]="pageNumber === totalPages">
+      Next
+    </button>
+  </div>
+</div>

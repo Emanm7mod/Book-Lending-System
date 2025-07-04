@@ -1,6 +1,7 @@
 export interface Iborrowbookshow {
     bookId: number;
-    name: string;
+    bookName: string;
     quantity: number;
-    statusBook:string
+    statusBook:string;
+    borrowDate:Date;
 }

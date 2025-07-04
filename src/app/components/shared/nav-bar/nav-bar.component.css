@@ -1,0 +1,12 @@
+.my-active-link .nav-link {
+  color: #ff6600; /* لون برتقالي مميز */
+  font-weight: bold;
+  border-bottom: 2px solid #ff6600; /* خط تحت اللينك */
+  transition: color 0.3s ease;
+}
+
+/* لو عايزة تغيير في الخلفية بدل اللون */
+.my-active-link {
+  background-color: #ffe6cc;
+  border-radius: 4px;
+}

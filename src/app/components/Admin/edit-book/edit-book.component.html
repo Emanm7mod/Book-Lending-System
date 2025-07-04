@@ -1,0 +1,82 @@
+ <div class="container-xl ">
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = null" aria-label="Close"></button>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = null" aria-label="Close"></button>
+  </div>
+  <h3 class="text-center mb-4">Edit Book</h3>
+  <form #editForm="ngForm" (ngSubmit)="updateBook()" novalidate>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label">Book Name</label>
+        <input type="text" class="form-control" [(ngModel)]="bookData.name" name="name" required minlength="3" #nameInput="ngModel" />
+        <div *ngIf="nameInput.invalid && nameInput.touched" class="text-danger small">
+          <div *ngIf="nameInput.errors?.['required']">Book name is required.</div>
+          <div *ngIf="nameInput.errors?.['minlength']">Book name must be at least 3 characters.</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Quantity</label>
+        <input type="number" class="form-control" [(ngModel)]="bookData.quantity" name="quantity" required min="1" #quantityInput="ngModel" />
+        <div *ngIf="quantityInput.invalid && quantityInput.touched" class="text-danger small">
+          <div *ngIf="quantityInput.errors?.['required']">Quantity is required.</div>
+          <div *ngIf="quantityInput.errors?.['min']">Quantity must be at least 1.</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Author</label>
+        <input type="text" class="form-control" [(ngModel)]="bookData.author" name="author" required minlength="3" #authorInput="ngModel" />
+        <div *ngIf="authorInput.invalid && authorInput.touched" class="text-danger small">
+          <div *ngIf="authorInput.errors?.['required']">Author name is required.</div>
+          <div *ngIf="authorInput.errors?.['minlength']">Author name must be at least 3 characters.</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">ISBN</label>
+        <input type="text" class="form-control" [(ngModel)]="bookData.isbn" name="isbn" required pattern="^(97(8|9))?\d{9}(\d|X)$" maxlength="13" #isbnInput="ngModel" />
+        <div *ngIf="isbnInput.invalid && isbnInput.touched" class="text-danger small">
+          <div *ngIf="isbnInput.errors?.['required']">ISBN is required.</div>
+          <div *ngIf="isbnInput.errors?.['pattern']">ISBN must be valid format (10 or 13 digits).</div>
+          <div *ngIf="isbnInput.errors?.['maxlength']">ISBN cannot exceed 13 characters.</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Published Year</label>
+        <input type="number" class="form-control" [(ngModel)]="bookData.publishedYear" required name="publishedYear" min="1800" max="{{ currentYear }}" #yearInput="ngModel" />
+        <div *ngIf="yearInput.invalid && yearInput.touched" class="text-danger small">
+          <div *ngIf="yearInput.errors?.['required']">Published Year is required.</div>
+          <div *ngIf="yearInput.errors?.['min']">Year must be at least 1800.</div>
+          <div *ngIf="yearInput.errors?.['max']">Year cannot be in the future.</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Cover Image URL</label>
+        <input type="url" class="form-control" [(ngModel)]="bookData.coverImageUrl" name="coverImageUrl" required pattern="https?://.+" #coverImageUrlInput="ngModel" />
+        <div *ngIf="coverImageUrlInput.invalid && coverImageUrlInput.touched" class="text-danger small">
+          <div *ngIf="coverImageUrlInput.errors?.['required']">Cover Image URL is required.</div>
+          <div *ngIf="coverImageUrlInput.errors?.['pattern']">Please enter a valid URL (must start with http or https).</div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" [(ngModel)]="bookData.description" name="description"required maxlength="500" rows="3" #descriptionInput="ngModel"></textarea>
+        <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="text-danger small">
+          <div *ngIf="descriptionInput.errors?.['required']">Description is required.</div>
+          <div *ngIf="descriptionInput.errors?.['maxlength']">Description cannot exceed 500 characters.</div>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-center gap-3 mt-3">
+        <button class="btn btn-primary px-4" type="submit" [disabled]="editForm.invalid">
+          Update Book
+        </button>
+        <button class="btn btn-secondary px-4" [routerLink]="['/bookforadmin']" routerLinkActive="router-link-active">
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>

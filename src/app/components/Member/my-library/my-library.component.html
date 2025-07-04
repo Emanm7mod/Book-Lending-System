@@ -1,0 +1,70 @@
+<div *ngIf="successMessage" class="alert alert-success text-center mt-3 mx-auto w-75 shadow-sm">
+  {{ successMessage }}
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger text-center mt-3 mx-auto w-75 shadow-sm">
+  {{ errorMessage }}
+</div>
+
+<div class="container ">
+  <div class="d-flex justify-content-center align-items-center mt-5 mb-5">
+    <label for="bookFilter" class="me-2 fw-bold">My Library:</label>
+    <select id="bookFilter"
+            class="form-select w-auto"
+            [(ngModel)]="selectedFilter"
+            (change)="onFilterChange(selectedFilter)">
+      <option value="all">📚 All Borrowed Books</option>
+      <option value="overdue">⏰ Overdue Return Books</option>
+    </select>
+  </div>
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="!isLoading" class="table-responsive">
+    <table class="table table-bordered text-center align-middle" *ngIf="selectedFilter === 'all' ? borrowedBooks.length > 0 : notReturnedBooks.length > 0">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Book Name</th>
+          <th>Borrow Date</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of (selectedFilter === 'all' ? borrowedBooks : notReturnedBooks)">
+          <td>{{ book.bookName }}</td>
+          <td>{{ book.borrowDate | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ getExpectedReturnDate(book.borrowDate) | date: 'yyyy-MM-dd' }}</td>
+          <td>
+            <span [ngClass]="{
+              'text-success': book.statusBook === 'Returned',
+              'badge bg-warning text-dark': book.statusBook !== 'Returned'
+            }">
+              {{ book.statusBook }}
+            </span>
+            
+          </td>
+          <td>
+            <button 
+              *ngIf="book.statusBook !== 'Returned'" 
+              class="btn btn-outline-warning btn-sm"
+              (click)="returnBook(book)">
+              Return
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center text-muted mt-4" *ngIf="selectedFilter === 'all' && borrowedBooks.length === 0">
+    <i class="bi bi-emoji-frown fs-3 d-block mb-2"></i>
+    You have no borrowed books.
+  </div>
+  <div class="text-center text-muted mt-4" *ngIf="selectedFilter === 'overdue' && notReturnedBooks.length === 0">
+    <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+    You have no overdue returned books.
+  </div>
+</div>
+

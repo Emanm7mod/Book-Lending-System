@@ -1,33 +1,38 @@
-<app-header></app-header>
-
-<!-- Hero Section -->
 <section class="hero bg-light text-center py-5">
   <div class="container">
     <h1 class="display-4">Welcome to Our Digital Library</h1>
     <p class="lead">Browse, choose, and borrow your favorite books with ease.</p>
-    <a routerLink="/books" class="btn btn-primary btn-lg mt-3">Get Started</a>
-    <!-- <a routerLink="/bookforadmin" class="btn btn-primary btn-lg mt-3">book for admin</a> -->
+    <a (click)="goToStart()" class="btn btn-primary btn-lg mt-3">Get Started</a>
   </div>
 </section>
 
-<!-- Books Section -->
-<section class="books-section py-5">
+<div *ngIf="isLoading" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<section *ngIf="!isLoading" class="books-section py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-md-4 mb-4" *ngFor="let book of featuredBooks">
-        <div class="card h-100">
-          <img [src]="book.image" class="card-img-top" [alt]="book.title" width="100px" height="300px"/>
-          <div class="card-body">
-            <h5 class="card-title">{{ book.title }}</h5>
-            <p class="card-text">{{ book.description }}</p>
-          </div>
+    <div class="slider-container" (mouseenter)="stopAutoplay()" (mouseleave)="startAutoplay()">
+    <button class="nav-btn prev-btn" (click)="prev()">&#10094;</button>
+
+    <div class="slider">
+      <div class="slides" [style.transform]="'translateX(-' + currentindex * 100 + '%)'">
+        <div class="slide" *ngFor="let book of books">
+          <img [src]="book.coverImageUrl" alt="{{ book.name }}" />
+          <h4>{{ book.name }}</h4>
+          <p>{{ book.author }}</p>
         </div>
       </div>
     </div>
+
+    <button class="nav-btn next-btn" (click)="next()">&#10095;</button>
+  </div>
   </div>
 </section>
 
-<!-- Footer -->
+
 <footer class="footer bg-dark text-white text-center py-3 mt-4">
   <p>&copy; 2025 Book Borrowing Library. All rights reserved.</p>
 </footer>

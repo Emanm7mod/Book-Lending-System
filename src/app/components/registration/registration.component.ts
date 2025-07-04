@@ -16,8 +16,9 @@ export class RegistrationComponent implements OnInit{
   messageTimeout: any;
 
  registerForm!: FormGroup;
+ isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder, private registerserv:LoginService,private router:Router) {}
+ constructor(private fb: FormBuilder, private registerserv:LoginService,private router:Router) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group(
@@ -48,7 +49,6 @@ export class RegistrationComponent implements OnInit{
 
   onRegister(): void {
     if (this.registerForm.valid) {
-      console.log('Form Data:', this.registerForm.value);
       const formValues = this.registerForm.value;
       const dataload = {
         username: formValues.fullName,

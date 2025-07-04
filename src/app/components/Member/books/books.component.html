@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="!isLoading" class="row g-4">
+    <div *ngFor="let book of books" class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+      <div
+        class="card w-100 shadow-sm book-card"
+        [ngClass]="{ 'border-danger bg-light text-muted': book.quantity === 0 }"
+      >
+        <img
+          [src]="book.coverImageUrl"
+          alt="Not found"
+          class="card-img-top img-fluid book-image"
+        />
+
+        <div class="card-body text-center d-flex flex-column justify-content-between">
+          <h6 class="card-title mb-1">{{ book.name }}</h6>
+          <small class="card-text d-block mb-1">by {{ book.author }}</small>
+          <div class="mt-auto">
+            <button
+              class="btn btn-primary btn-sm mb-2"
+              [routerLink]="['/bookdetails', book.id]"
+            >
+              Details
+            </button>
+
+            <div *ngIf="book.quantity === 0">
+              <span class="badge bg-danger">Unavailable</span>
+            </div>
+
+            <div *ngIf="borrowedBookIds.includes(book.id)">
+              <span class="badge bg-warning text-dark">Borrowed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav aria-label="Page navigation example" class="mt-4">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+        Previous
+      </button>
+    </li>
+
+    <li
+      class="page-item"
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      [class.active]="currentPage === i + 1"
+    >
+      <button class="page-link" (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </li>
+
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>
+<footer class="footer bg-dark text-white text-center py-3 mt-4">
+  <p>&copy; 2025 Book Borrowing Library. All rights reserved.</p>
+</footer>

@@ -21,124 +21,76 @@ import { TokenServiceService } from '../../services/token-service.service';
 })
 export class LoginComponent {
   myform = new FormGroup({
-    user_email: new FormControl('', Validators.required),
+    user_email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
-      Validators.pattern(
-        '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$'
-      ),
+      Validators.pattern('^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$')
     ]),
+    rememberMe: new FormControl(false)
   });
-  constructor(private loginservice:LoginService,private router:Router ,private token_servic:TokenServiceService) {}
 
-   //to send date to api and create jwt token
-  // send_data() {
-  //   if (this.myform.valid) {
-  //     const loginData: Ilogin = {
-  //       email: this.myform.value.user_email || '',
-  //       password: this.myform.value.password || '',
-  //     };
-
-  //     this.loginservice.login(loginData).subscribe({
-  //       next: (response: any) => {
-  //         if (response.token) {
-  //           this.loginservice.settoken(response.token);
-  //           console.log(this.loginservice.settoken(response.token))
-  //           console.log(response.token)
-  //           this.router.navigate(['/home']);
-           
-  //         } else {
-  //           console.error('Login failed: No token in response');
-  //         }
-  //       },
-  //       error: (err:any) => {
-  //         alert('Login failed');
-  //        console.log(err);
-  //       },
-  //     });
-  //   } else {
-  //     alert('Please Enter your Email and password');
-  //   }
-  // }
-
-//   send_data() {
-//   if (this.myform.valid) {
-//     const loginData: Ilogin = {
-//       email: this.myform.value.user_email || '',
-//       password: this.myform.value.password || '',
-//     };
-
-//     this.loginservice.login(loginData).subscribe({
-//       next: (response: any) => {
-//         if (response.token) {
-//           // حفظ التوكن
-//           this.loginservice.settoken(response.token);
-//           console.log(response.token);
-
-//           // 👇 حفظ الـ userId لو راجع في الـ response
-//           if (response.userId) {
-//             localStorage.setItem('userId', response.userId);
-//             console.log('Saved userId:', response.userId);
-//           }
-
-//           // التوجيه
-//           this.router.navigate(['/home']);
-//         } else {
-//           console.error('Login failed: No token in response');
-//         }
-//       },
-//       error: (err: any) => {
-//         alert('Login failed');
-//         console.log(err);
-//       },
-//     });
-//   } else {
-//     alert('Please Enter your Email and password');
-//   }
-// }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-send_data() {
-  if (this.myform.valid) {
-    const loginData: Ilogin = {
-      email: this.myform.value.user_email || '',
-      password: this.myform.value.password || '',
-    };
-
-    this.loginservice.login(loginData).subscribe({
-      next: (response: any) => {
-        if (response.token) {
-          // حفظ التوكن
-          this.loginservice.settoken(response.token);
-
-          // جلب الدور من التوكن مباشرة
-          const role = this.token_servic.getRole();
-
-          if (role === 'Admin') {
-            this.router.navigate(['/bookforadmin']);
-          } else {
-            this.router.navigate(['/home']);
-          }
-
-          // لو بتحتاج تخزن userId في localStorage أو أي مكان تاني
-          const userId = this.token_servic.getUserId();
-          if (userId) {
-            localStorage.setItem('userId', userId);
-          }
-
-        } else {
-          console.error('Login failed: No token in response');
-        }
-      },
-      error: (err: any) => {
-        alert('Login failed');
-        console.log(err);
-      },
-    });
-  } else {
-    alert('Please Enter your Email and password');
+  get email() {
+    return this.myform.get('user_email');
   }
- 
-}
+
+  get password() {
+    return this.myform.get('password');
+  }
+
+  constructor(private loginservice:LoginService,private router:Router ,private token_servic:TokenServiceService) {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      this.myform.patchValue({
+        user_email: savedEmail,
+        rememberMe: true
+      });
+    }
+  }
+  send_data() {
+    if (this.myform.valid) {
+      const loginData: Ilogin = {
+        email: this.myform.value.user_email || '',
+        password: this.myform.value.password || '',
+      };
+      if (this.myform.value.rememberMe) {
+      localStorage.setItem('rememberedEmail', loginData.email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+      this.loginservice.login(loginData).subscribe({
+        next: (response: any) => {
+          if (response.token) {
+            this.token_servic.settoken(response.token);
+            const role = this.token_servic.getRole();
+
+            if (role === 'Admin') {
+              this.router.navigate(['/bookborrowedAdmin']);
+            } else {
+              this.router.navigate(['/books']);
+            }
+            const userId = this.token_servic.getUserId();
+            if (userId) {
+              localStorage.setItem('userId', userId);
+            }
+
+          } else {
+            console.error('Login failed: No token in response');
+          }
+        },
+        error: (err: any) => {
+          alert('Login failed');
+          console.log(err);
+        },
+      });
+      
+    } else {
+      alert('Please Enter your Email and password');
+    }
+  
+  }
 
 }

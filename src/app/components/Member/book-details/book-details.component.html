@@ -1,0 +1,60 @@
+<div *ngIf="successMessage" class="alert alert-success text-center">
+  {{ successMessage }}
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger text-center">
+  {{ errorMessage }}
+</div>
+
+<div class="container mt-4 p-4 border rounded shadow-sm bg-white" style="max-width: 900px;">
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <h2 class="text-center text-muted">Book Details</h2>
+
+  <div *ngIf="!isLoading" class="row align-items-center">
+    <div class="col-md-5 text-center mb-3 mb-md-0">
+      <img [src]="book.coverImageUrl" alt="not found" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+    </div>
+    <div class="col-md-7">
+      <h4 class="text-secondary mb-3">Book Name: {{ book.name }}</h4>
+      <h4 class="text-secondary mb-3">Author: {{book.author}}</h4>
+      <h5 class="text-secondary mb-3">ISBN: {{book.isbn}}</h5>
+      <h5 class="text-secondary mb-3">published Year: {{book.publishedYear}}</h5>
+      <h5 class="text-secondary mb-3">Description: {{book.description}}</h5>
+      <h5 class="text-secondary mb-3">Quantity: {{ book.quantity }}</h5>
+      <div *ngIf="book.quantity > 0; else unavailable">
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <button 
+            *ngIf="!borrowedBookIds.includes(book.id)" 
+            class="btn btn-success" 
+            (click)="borrowBook(book)">
+            Borrow
+          </button>
+
+          <button 
+            *ngIf="borrowedBookIds.includes(book.id)" 
+            class="btn btn-warning" 
+            (click)="returnBook(book)">
+            Return
+          </button>
+
+          <button 
+            [routerLink]="['/books']" 
+            class="btn btn-secondary">
+            Back
+          </button>
+        </div>
+      </div>
+      <ng-template #unavailable>
+        <span class="badge bg-danger">Unavailable</span>
+      </ng-template>
+      <div *ngIf="borrowedBookIds.includes(book.id)" class="mt-3">
+        <a [routerLink]="'/library'" class="badge text-bg-warning text-decoration-none p-2">
+          Go to Library
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
