@@ -1,35 +1,35 @@
 <div class="container mt-4 mb-4">
   <h2 class="text-center mb-4">Dashboard Overview</h2>
   <div class="row text-center mb-4">
-    <div class="col-md-3">
-      <div class="card shadow-sm border-primary">
+    <div class="col-md-3 mt-3">
+      <div class="card shadow-sm bg-primary">
         <div class="card-body">
-          <h5 class="card-title">Total Books</h5>
-          <p class="card-text display-6 text-primary">{{ totalBooks }}</p>
+          <h5 class="card-title">📖 Total Books</h5>
+          <p class="card-text display-6">{{ totalBooks }}</p>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-danger">
+    <div class="col-md-3 mt-3">
+      <div class="card shadow-sm bg-danger">
         <div class="card-body">
-          <h5 class="card-title">Total Overdue Books</h5>
-          <p class="card-text display-6 text-danger">{{ totalOverdue }}</p>
+          <h5 class="card-title">⏰Total Overdue Books</h5>
+          <p class="card-text display-6">{{ totalOverdue }}</p>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-warning">
+    <div class="col-md-3 mt-3">
+      <div class="card shadow-sm bg-warning">
         <div class="card-body">
-          <h5 class="card-title">Total Borrows Books</h5>
-          <p class="card-text display-6 text-warning">{{ totalBorrows }}</p>
+          <h5 class="card-title">📚 Total Borrows Books</h5>
+          <p class="card-text display-6">{{ totalBorrows }}</p>
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-success">
+    <div class="col-md-3 mt-3">
+      <div class="card shadow-sm bg-success">
         <div class="card-body">
-          <h5 class="card-title">Total Returned Books</h5>
-          <p class="card-text display-6 text-success">{{ totalReturned }}</p>
+          <h5 class="card-title">✔ Books Returned</h5>
+          <p class="card-text display-6 ">{{ totalReturned }}</p>
         </div>
       </div>
     </div>
@@ -45,17 +45,17 @@
     <button class="btn"
       [class.btn-primary]="selectedTab === 'all'"
       [class.btn-outline-primary]="selectedTab !== 'all'"
-      (click)="selectTab('all')">All</button>
+      (click)="selectTab('all')">All Books</button>
 
     <button class="btn"
       [class.btn-primary]="selectedTab === 'overdue'"
       [class.btn-outline-primary]="selectedTab !== 'overdue'"
-      (click)="selectTab('overdue')">Overdue</button>
+      (click)="selectTab('overdue')">Overdue Books</button>
 
     <button class="btn"
       [class.btn-primary]="selectedTab === 'returned'"
       [class.btn-outline-primary]="selectedTab !== 'returned'"
-      (click)="selectTab('returned')">Returned</button>
+      (click)="selectTab('returned')">Returned Books</button>
   </div>
   <div *ngIf="!isLoading" class="table-responsive">
     <table class="table table-bordered text-center align-middle" *ngIf="filteredRecords.length > 0">
@@ -63,7 +63,7 @@
         <tr>
           <th>Number</th>
           <th>User Name</th>
-          <th>Book Name</th>
+          <th>Book Title</th>
           <th>Borrow Date</th>
           <th>Status</th>
         </tr>

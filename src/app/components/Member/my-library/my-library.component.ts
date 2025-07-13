@@ -40,6 +40,7 @@ loadBorrowedBooks() {
       next: (data) => {
       this.borrowedBooks = data;
       this.isLoading=false;
+      console.log('borrow books :',data)
       },
       error: (err) => {
         console.error('Error fetching borrowed books:', err);
@@ -53,8 +54,11 @@ getnotReturnedBooks(){
   if(this.userId){
     this.borrowService.getoverdueReturnBookForMember(this.userId).subscribe({
       next:(data)=>{
-        this.notReturnedBooks=data;
+        this.notReturnedBooks=data.filter((book: any) => !book.isReturned);
         this.isLoading=false;
+        console.log('due book : ',data)
+        console.log('filter book : ',this.notReturnedBooks)
+
       },
       error:(err)=>{
         console.error('Error fetching overdue returned books:', err);

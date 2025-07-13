@@ -8,7 +8,7 @@ import { ShowbookForAdminComponent } from './components/Admin/showbook-for-admin
 import { AddBookComponent } from './components/Admin/add-book/add-book.component';
 import { EditBookComponent } from './components/Admin/edit-book/edit-book.component';
 import { MyLibraryComponent } from './components/Member/my-library/my-library.component';
-import { ShowBookBorrowForAdminComponent } from './components/Admin/show-book-borrow-for-admin/show-book-borrow-for-admin.component';
+import { ShowBookBorrowForAdminComponent } from './components/Admin/dashboard/show-book-borrow-for-admin.component';
 import { authGuard } from './Guards/guards/auth.guard';
 import { adminGuard } from './Guards/guards/admin.guard';
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
